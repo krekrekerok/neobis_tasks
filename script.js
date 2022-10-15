@@ -28,27 +28,28 @@ async function clickHandler(){
     }
 }
 
+const API_KEY = "K6mHYBLy9eWUP6LQknm33B7hChpPzvVa"
+const searchBTN = document.getElementById("search-btn")
 
-// const API_KEY = "K6mHYBLy9eWUP6LQknm33B7hChpPzvVa"
+searchBTN.addEventListener("click", getGiphy)
 
-// const requestURL = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&limit=1&q=deadpool`
-
-// const searchBTN = document.getElementById("search-btn")
-// let img = document.getElementsById("img")
-
-// searchBTN.addEventListener("click", getGiphy)
-
-
-// async function getGiphy(){
-//     let res = await fetch(requestURL)
-//     if(!res.ok){
-//         console.log("here's a problem");
-//         return
-//     }
-//     const content = await res.json()
-//     console.log(content.data[0].images.downsized.url);
-//     // img.src = content.data[0].images.downsized.url
-//     const markUp =
-//     `<img src="${content.data[0].images.downsized.url}" alt= "${content.data[0].title}">`
-//     document.querySelector('#img').insertAdjacentHTML("afterbegin", markUp)
-// }
+async function getGiphy(){
+    let requestURL = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&limit=12&q=`
+    let input = document.getElementById("input_bar").value.trim()
+    requestURL = requestURL.concat(input)
+    let res = await fetch(requestURL)
+    if(!res.ok){
+        console.log("here's a problem");
+        return
+    }
+    const content = await res.json();
+    let imagesURL = content.data;
+    imagesURL.forEach(data => {
+            const markUp =
+            `
+            <img src="${data.images.downsized.url}">
+            `
+            document.querySelector('div').insertAdjacentHTML("beforeend", markUp)
+        });
+    console.log(imagesURL)
+}
